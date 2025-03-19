@@ -79,8 +79,8 @@ export class KakaoController {
         return {
             version: "2.0",
             useCallback: true,
-            data: {
-                text: { text }
+            template: {
+                outputs: [{ simpleText: { text: text } }]
             }
         };
     }
