@@ -16,7 +16,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   // Swagger UI에 대한 path를 연결함
   // .setup('swagger ui endpoint', app, swagger_document)
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }
