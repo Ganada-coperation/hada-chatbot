@@ -3,7 +3,6 @@ import serverlessExpress from '@vendia/serverless-express';
 import { Callback, Context, Handler } from 'aws-lambda';
 
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import express from 'express';
 
 let server: Handler;
@@ -13,22 +12,11 @@ async function bootstrap(): Promise<Handler> {
 
     app.enableCors(); // CORS 설정 추가
 
-    // Swagger 설정 추가
-    const config = new DocumentBuilder()
-        .setTitle('Hada Chatbot API')
-        .setDescription('Hada Chatbot API Documentation')
-        .setVersion('1.0')
-        .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document); // API Gateway에서도 Swagger 접근 가능
-
+    // Express의 JSON 응답을 유지하도록 설정
+    app.useGlobalFilters();
     await app.init();
 
     const expressApp = app.getHttpAdapter().getInstance();
-
-    // Swagger UI 정적 파일을 서빙할 수 있도록 설정
-    expressApp.use('/docs', express.static('node_modules/swagger-ui-dist'));
 
     return serverlessExpress({ app: expressApp });
 }

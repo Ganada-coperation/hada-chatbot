@@ -18,6 +18,8 @@ async function bootstrap() {
   // .setup('swagger ui endpoint', app, swagger_document)
   SwaggerModule.setup('docs', app, document);
 
+  app.useGlobalFilters(); // Express의 JSON 응답을 유지하도록 설정
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
