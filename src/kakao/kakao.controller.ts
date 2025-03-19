@@ -78,8 +78,9 @@ export class KakaoController {
     private formatKakaoResponse(text: string) {
         return {
             version: "2.0",
-            template: {
-                outputs: [{ simpleText: { text } }]
+            useCallback: true,
+            data: {
+                text: { text }
             }
         };
     }
