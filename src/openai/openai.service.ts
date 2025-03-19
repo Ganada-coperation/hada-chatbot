@@ -1,21 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
+import OpenAI from 'openai';
+import { ChatCompletionMessageParam } from 'openai/resources/chat';
 
 @Injectable()
 export class OpenAIService {
-    private readonly apiKey = process.env.OPENAI_API_KEY;
-    private readonly apiUrl = 'https://api.openai.com/v1/chat/completions';
+    private readonly openai: OpenAI;
 
-    async requestChatAPI(messages: { role: string; content: string }[]) {
+    constructor(private readonly configService: ConfigService) {
+        this.openai = new OpenAI({
+            apiKey: this.configService.get<string>('OPENAI_API_KEY'),
+        });
+    }
+
+    async requestChatAPI(messages: ChatCompletionMessageParam[]) {
         try {
-            const response = await axios.post(
-                this.apiUrl,
-                { model: 'gpt-4', messages },
-                {
-                    headers: { Authorization: `Bearer ${this.apiKey}` },
-                }
-            );
-            return response.data.choices[0].message.content;
+            const response = await this.openai.chat.completions.create({
+                model: 'gpt-4o',
+                messages,
+            });
+
+            return response.choices[0].message?.content || '응답이 없습니다.';
         } catch (error) {
             console.error('OpenAI API 요청 실패:', error);
             throw new Error('OpenAI API 호출 중 오류가 발생했습니다.');

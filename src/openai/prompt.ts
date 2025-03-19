@@ -74,10 +74,11 @@ export const Prompts = {
 "정말 따뜻한 이야기네요. 나눠주셔서 감사합니다!"
 "오늘 들려주신 이야기가 많은 분들에게도 큰 공감이 될 것 같아요."`,
 
-    chatUserPrompt: (message: string):string => `임시 메시지`,
+    chatUserPrompt: (chatHistory:String, message: string):string =>
+        `이전 대화:\n${chatHistory}\n\n현재 대화:\n${message}`,
 
     articleSystemPrompt: () =>
-        `~~~~~~~~이렇게 글을 작성해주세요`,
+        `뉴스레터 같이 글을 작성해주세요`,   //todo : 수정하기
 
     articleUserPrompt: (chatHistory: string) =>
         `다음 대화를 기반으로 글을 작성해 주세요:\n\n${chatHistory}`,

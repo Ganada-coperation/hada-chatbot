@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import { OpenAIService } from '../openai/openai.service';
 import {Prompts} from "../openai/prompt";
+import {ChatCompletionMessageParam} from "openai/resources/chat";
 
 @Injectable()
 export class ChatService {
@@ -8,7 +9,7 @@ export class ChatService {
                 @Inject('PROMPTS') private readonly prompts: typeof Prompts) {}
 
     // 챗봇 대화 기능
-    async chatWithGPT(message: string): Promise<string> {
+    async chatWithGPT(chatHistory: string, message: string): Promise<string> {
         // todo 유저 아이디로 이전 채팅 가져오기
         // todo 이전 채팅을 기반과 현재 메시지를 합쳐 gpt에게 요청
         // 요청 예시
@@ -20,9 +21,9 @@ export class ChatService {
 
         // 프롬프트 생성
         // 시스템 메시지 + 사용자 입력 메시지로 구성
-        const messages = [
+        const messages: ChatCompletionMessageParam[] = [
             { role: 'system', content: this.prompts.chatSystemPrompt() }, // 시스템 프롬프트
-            { role: 'user', content: this.prompts.chatUserPrompt(message) } // 사용자 입력
+            { role: 'user', content: this.prompts.chatUserPrompt(chatHistory, message) } // 사용자 입력
         ];
 
         // OpenAI API 요청
@@ -32,7 +33,7 @@ export class ChatService {
     // 대화를 바탕으로 글 생성 기능
     async createArticle(chatHistory: string): Promise<string> {
         // 프롬프트 생성
-        const messages = [
+        const messages: ChatCompletionMessageParam[] = [
             { role: 'system', content: this.prompts.articleSystemPrompt() }, // 시스템 프롬프트
             { role: 'user', content: this.prompts.articleUserPrompt(chatHistory) } // 사용자 입력
         ];

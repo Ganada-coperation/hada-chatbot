@@ -12,7 +12,7 @@ import {ConfigModule} from "@nestjs/config";
   imports: [OpenAIModule, ChatModule, KakaoModule, ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
-    envFilePath: [ '.env.' + process.env.NODE_ENV ],
+    envFilePath: [ '.env.' + process.env.NODE_ENV ], // 실행 환경에 따라 .env 파일을 선택
     validationSchema: configValidationSchema,
     load: [ databaseConfig ],
   }),
