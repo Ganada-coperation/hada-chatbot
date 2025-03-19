@@ -6,9 +6,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-      .setTitle('Swagger Example')
-      .setDescription('Swagger study API description')
-      .setVersion('1.0.0')
+      .setTitle('Hada Chatbot API')
+      .setDescription('Hada Chatbot API Documentation')
+      .setVersion('1.0')
       .addTag('swagger')
       .build();
 
