@@ -69,7 +69,7 @@ class TemplateDto {
     outputs: { simpleText: SimpleTextDto }[];
 }
 
-// 최종 응답 DTO
+// 최종 대화 응답 DTO
 export class KakaoResponseDto {
     @IsString()
     version: string;
@@ -77,4 +77,17 @@ export class KakaoResponseDto {
     @ValidateNested()
     @Type(() => TemplateDto)
     template: TemplateDto;
+}
+
+export class Data {
+    @IsString()
+    text: String;
+}
+
+// 콜백 응답 DTO
+export class KakaoCallbackResponseDto {
+    @IsString()
+    version: string;
+    useCallback : boolean;
+    data : Data;
 }

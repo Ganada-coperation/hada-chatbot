@@ -1,6 +1,6 @@
 import {Controller, Post, Body} from '@nestjs/common';
 import { ChatService } from '../chat/chat.service';
-import {KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
+import {KakaoCallbackResponseDto, KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
 import {ApiBody} from "@nestjs/swagger";
 
 @Controller('kakao')
@@ -55,6 +55,14 @@ export class KakaoController {
 
     }
 
+    // 채팅 글 생성 콜백 API, (미리 응답값 설정 API)
+    @ApiBody({ type: SkillPayloadDto })
+    @Post('article')
+    async createArticleCallback(@Body() body: SkillPayloadDto): Promise<KakaoCallbackResponseDto> {
+        const userId = body.userRequest.user.id;
+        return this.formatKakaoCallbackResponse("하다가 글을 생성하고 있어요!\n잠시만 기다려 주시면 멋진 글을 만들어 드릴게요!");
+    }
+
     // 채팅 끝내기 (이전 채팅 내역 삭제) todo 일단 POST로 구현
     @ApiBody({ type: SkillPayloadDto })
     @Post('delete-chat')
@@ -81,6 +89,15 @@ export class KakaoController {
             template: {
                 outputs: [{ simpleText: { text: text } }]
             }
+        };
+    }
+
+    // 카카오톡 콜백 응답 변환
+    private formatKakaoCallbackResponse(text: string):KakaoCallbackResponseDto {
+        return {
+            version: "2.0",
+            useCallback: true,
+            data: { text: text }
         };
     }
 }
