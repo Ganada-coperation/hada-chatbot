@@ -1,9 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import serverlessExpress from '@vendia/serverless-express';
+import { configure as serverlessExpress } from '@vendia/serverless-express';
 import { Callback, Context, Handler } from 'aws-lambda';
 
 import { AppModule } from './app.module';
-import express from 'express';
 
 let server: Handler;
 
@@ -12,8 +11,6 @@ async function bootstrap(): Promise<Handler> {
 
     app.enableCors(); // CORS 설정 추가
 
-    // Express의 JSON 응답을 유지하도록 설정
-    app.useGlobalFilters();
     await app.init();
 
     const expressApp = app.getHttpAdapter().getInstance();

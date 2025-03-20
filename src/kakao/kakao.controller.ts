@@ -1,6 +1,6 @@
 import {Controller, Post, Body} from '@nestjs/common';
 import { ChatService } from '../chat/chat.service';
-import { SkillPayloadDto } from './kakao.dto';
+import {KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
 import {ApiBody} from "@nestjs/swagger";
 
 @Controller('kakao')
@@ -10,7 +10,7 @@ export class KakaoController {
     // 카카오톡 챗봇 API
     @ApiBody({ type: SkillPayloadDto })
     @Post('chat')
-    async receiveMessage(@Body() body: SkillPayloadDto): Promise<any> {
+    async receiveMessage(@Body() body: SkillPayloadDto): Promise<KakaoResponseDto> {
         const userMessage = body.userRequest.utterance;
         const userId = body.userRequest.user.id;
 
@@ -36,7 +36,7 @@ export class KakaoController {
     // 채팅 바탕 글 생성 API
     @ApiBody({ type: SkillPayloadDto })
     @Post('create-article')
-    async createArticle(@Body() body: SkillPayloadDto): Promise<any> {
+    async createArticle(@Body() body: SkillPayloadDto): Promise<KakaoResponseDto> {
         const userId = body.userRequest.user.id;
 
         // 사용자별 세션 저장소에 사용자 ID가 없으면 새로운 세션을 생성
@@ -58,7 +58,7 @@ export class KakaoController {
     // 채팅 끝내기 (이전 채팅 내역 삭제) todo 일단 POST로 구현
     @ApiBody({ type: SkillPayloadDto })
     @Post('delete-chat')
-    async deleteChat(@Body() body: SkillPayloadDto): Promise<any> {
+    async deleteChat(@Body() body: SkillPayloadDto): Promise<KakaoResponseDto> {
         const userId = body.userRequest.user.id;
 
         // 사용자별 세션 저장소에 사용자 ID가 없으면 새로운 세션을 생성
@@ -75,10 +75,9 @@ export class KakaoController {
 
 
     // 카카오톡 응답 JSON 형식 변환
-    private formatKakaoResponse(text: string) {
+    private formatKakaoResponse(text: string):KakaoResponseDto {
         return {
             version: "2.0",
-            useCallback: true,
             template: {
                 outputs: [{ simpleText: { text: text } }]
             }

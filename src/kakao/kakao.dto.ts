@@ -1,3 +1,6 @@
+import { IsString, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
 export class UserRequestDto {
     block: { id: string; name: string };
     user: {
@@ -49,4 +52,29 @@ export class SkillPayloadDto {
     action: ActionDto;
     userRequest: UserRequestDto;
     contexts: any[];
+}
+
+
+// simpleText 객체 정의
+class SimpleTextDto {
+    @IsString()
+    text: string;
+}
+
+// outputs 배열 정의
+class TemplateDto {
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => SimpleTextDto)
+    outputs: { simpleText: SimpleTextDto }[];
+}
+
+// 최종 응답 DTO
+export class KakaoResponseDto {
+    @IsString()
+    version: string;
+
+    @ValidateNested()
+    @Type(() => TemplateDto)
+    template: TemplateDto;
 }
