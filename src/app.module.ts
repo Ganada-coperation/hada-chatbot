@@ -21,9 +21,14 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRootAsync({
       imports: [ConfigModule], // ConfigModule 로드
       inject: [ConfigService], // ConfigService 주입
-      useFactory: (configService: ConfigService) => ({
-        uri: `mongodb://${configService.get<string>('DB_HOST')}:${configService.get<string>('DB_PORT')}/${configService.get<string>('DB_NAME')}`,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbHost = configService.get<string>('DB_HOST');
+
+        const uri = `${dbHost}`;
+
+        return { uri };
+
+      },
     }),
   ],
   controllers: [AppController],

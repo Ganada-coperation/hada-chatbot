@@ -37,6 +37,7 @@
     "dotenv": "^16.4.7",
     "express": "^5.0.1",
     "joi": "^17.13.3",
+    "mongodb": "^6.15.0",
     "mongoose": "^8.12.1",
     "openai": "^4.87.4",
     "reflect-metadata": "^0.2.2",
