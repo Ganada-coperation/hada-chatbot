@@ -6,7 +6,8 @@ import { ChatModule } from './domain/chat/chat.module';
 import { KakaoModule } from './domain/kakao/kakao.module';
 import { configValidationSchema } from './config/validation/config-validation';
 import databaseConfig from './config/database.config';
-import {ConfigModule} from "@nestjs/config";
+import {ConfigModule, ConfigService} from "@nestjs/config";
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [OpenAIModule, ChatModule, KakaoModule, ConfigModule.forRoot({
@@ -16,6 +17,14 @@ import {ConfigModule} from "@nestjs/config";
     validationSchema: configValidationSchema,
     load: [ databaseConfig ],
   }),
+    // MongoDB 연결
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule], // ConfigModule 로드
+      inject: [ConfigService], // ConfigService 주입
+      useFactory: (configService: ConfigService) => ({
+        uri: `mongodb://${configService.get<string>('DB_HOST')}:${configService.get<string>('DB_PORT')}/${configService.get<string>('DB_NAME')}`,
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
