@@ -7,6 +7,8 @@ import { KakaoModule } from './domain/kakao/kakao.module';
 import { configValidationSchema } from './config/validation/config-validation';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import { MongooseModule } from '@nestjs/mongoose';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/logging.interceptor';
 
 @Module({
   imports: [OpenAIModule, ChatModule, KakaoModule, ConfigModule.forRoot({
@@ -30,7 +32,13 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}
 
