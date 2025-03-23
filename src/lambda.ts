@@ -23,6 +23,13 @@ export const handler: Handler = async (
     context: Context,
     callback: Callback,
 ) => {
+
+    // Warmup 요청 무시
+    if (event.source === 'serverless-plugin-warmup') {
+        console.log('Lambda is warm!');
+        return 'Lambda is warm!';
+    }
+
     server = server ?? (await bootstrap());
     return server(event, context, callback);
 };
