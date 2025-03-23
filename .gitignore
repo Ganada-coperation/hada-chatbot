@@ -62,3 +62,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # 서버리스 설정 파일
 serverless.yaml
+
+# warmup 파일 (실행때만 필요함)
+.warmup/
