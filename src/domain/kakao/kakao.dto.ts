@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 
 export class UserRequestDto {
     block: { id: string; name: string };
+    callbackUrl?: string;
     user: {
         id: string;
         type: string;

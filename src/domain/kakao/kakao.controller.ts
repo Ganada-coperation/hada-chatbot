@@ -2,10 +2,12 @@ import {Controller, Post, Body} from '@nestjs/common';
 import { ChatService } from '../chat/chat.service';
 import {KakaoCallbackResponseDto, KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
 import {ApiBody} from "@nestjs/swagger";
+import { HttpService } from '@nestjs/axios';
 
 @Controller('kakao')
 export class KakaoController {
-    constructor(private readonly chatService: ChatService) {}
+    constructor(private readonly chatService: ChatService,
+                private readonly  httpService: HttpService) {}
 
     // 카카오톡 챗봇 API
     @ApiBody({ type: SkillPayloadDto })
@@ -55,13 +57,46 @@ export class KakaoController {
 
     }
 
-    // 채팅 글 생성 콜백 API, (미리 응답값 설정 API)
     @ApiBody({ type: SkillPayloadDto })
-    @Post('article')
+    @Post('create-article/callback')
     async createArticleCallback(@Body() body: SkillPayloadDto): Promise<KakaoCallbackResponseDto> {
         const userId = body.userRequest.user.id;
-        return this.formatKakaoCallbackResponse("하다가 글을 생성하고 있어요!\n잠시만 기다려 주시면 멋진 글을 만들어 드릴게요!");
+        const callbackUrl = body.userRequest.callbackUrl;
+
+        // 1차 응답: 콜백 대기 메시지 (5초 안에 응답)
+        // 비동기로 콜백 전송 (내부 로직은 현재 함수 실행이 끝난 뒤 실행)
+        setTimeout(async () => {
+            try {
+                if (!callbackUrl) {
+                    console.warn('⚠️ callbackUrl이 없어 콜백 전송을 생략합니다.');
+                    return;
+                }
+
+                // 세션 초기화
+                if (!userSessions[userId]) {
+                    userSessions[userId] = [];
+                }
+
+                const chatHistory = userSessions[userId].join('\n');
+
+                // 글 생성
+                const article = await this.chatService.createArticle(chatHistory);
+
+                // 카카오 말풍선 형식에 맞춘 응답
+                const finalResponse = this.formatKakaoResponse(article)
+
+                // 콜백 POST (반드시 toPromise 또는 firstValueFrom 필요)
+                this.httpService.post(callbackUrl, finalResponse);
+            } catch (err) {
+                console.error('콜백 전송 실패:', err);
+            }
+        }, 0); // 즉시 비동기 실행
+
+        return this.formatKakaoCallbackResponse(
+            '하다가 글을 생성하고 있어요!\n잠시만 기다려 주시면 멋진 글을 만들어 드릴게요!',
+        );
     }
+
 
     // 채팅 끝내기 (이전 채팅 내역 삭제) todo 일단 POST로 구현
     @ApiBody({ type: SkillPayloadDto })
