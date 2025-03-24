@@ -57,15 +57,18 @@ export class KakaoController {
 
     }
 
+    //  todo 서비스 로직으로 분리
     @ApiBody({ type: SkillPayloadDto })
     @Post('create-article/callback')
     async createArticleCallback(@Body() body: SkillPayloadDto): Promise<KakaoCallbackResponseDto> {
         const userId = body.userRequest.user.id;
         const callbackUrl = body.userRequest.callbackUrl;
+        console.log('[DEBUG] callbackUrl:', callbackUrl);
 
         // 1차 응답: 콜백 대기 메시지 (5초 안에 응답)
         // 비동기로 콜백 전송 (내부 로직은 현재 함수 실행이 끝난 뒤 실행)
         setTimeout(async () => {
+            console.log('콜백 전송 시작 -> setTimeout 내부 진입');
             try {
                 if (!callbackUrl) {
                     console.warn('⚠️ callbackUrl이 없어 콜백 전송을 생략합니다.');
@@ -81,6 +84,7 @@ export class KakaoController {
 
                 // 글 생성
                 const article = await this.chatService.createArticle(chatHistory);
+                console.log('[DEBUG] 생성된 글:', article);
 
                 // 카카오 말풍선 형식에 맞춘 응답
                 const finalResponse = this.formatKakaoResponse(article)
