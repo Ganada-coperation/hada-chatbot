@@ -11,10 +11,13 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/logging.interceptor';
 import {BullModule} from "@nestjs/bull";
 import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
+import {NewsletterModule} from "./domain/newsletter/newsletter.module";
+import {PostModule} from "./domain/post/post.module";
+import {UserModule} from "./domain/user/user.module";
 
 
 @Module({
-  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule,
+  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule, NewsletterModule, PostModule, UserModule,
     ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
