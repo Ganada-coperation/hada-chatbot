@@ -1,0 +1,53 @@
+name: Hada Chatbot service Dev Build and Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }} # Serverless Framework Access Key 설정 (이거 있으면 자동으로 인증됨)
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Node.js 설정
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 3. 패키지 설치
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. NestJS 빌드
+      - name: Build NestJS App
+        run: npm run build
+
+      # 5. serverless.yml 생성
+      - name: Write serverless.yml from Secret
+        run: |
+          echo "${{ secrets.DEV_SERVERLESS_YML }}" > serverless.yml
+
+      # 6. Serverless Framework 설치
+      - name: Install Serverless CLI
+        run: npm install -g serverless
+
+      # 7. AWS 자격 증명 설정
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 8. Serverless 배포
+      - name: Deploy to AWS with Serverless
+        run: serverless deploy --stage dev
