@@ -24,7 +24,7 @@ export class KakaoController {
         this.userSessionService.ensure(userId);
 
         // 이전 대화 내역 조회
-        const chatHistory = this.userSessionService.getHistory(userId).join("\n");
+        const chatHistory = (await this.userSessionService.getHistory(userId)).join("\n");
 
         // 세션에 사용자 메시지 저장
         this.userSessionService.append(userId, userMessage);
@@ -47,7 +47,7 @@ export class KakaoController {
         this.userSessionService.ensure(userId);
 
         // 이전 대화 내역 조회
-        const chatHistory = this.userSessionService.getHistory(userId).join("\n");
+        const chatHistory = (await this.userSessionService.getHistory(userId)).join("\n");
 
         // 글 생성
         const article = await this.chatService.createArticle(chatHistory);

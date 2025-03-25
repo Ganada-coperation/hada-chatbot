@@ -12,6 +12,7 @@ import { LoggingInterceptor } from './common/logging.interceptor';
 import {BullModule} from "@nestjs/bull";
 import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
 
+
 @Module({
   imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule,
     ConfigModule.forRoot({
@@ -32,6 +33,7 @@ import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
         return { uri };
 
       },}),
+      // BullModule 설정
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
