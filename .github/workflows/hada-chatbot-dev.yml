@@ -3,7 +3,7 @@ name: Hada Chatbot service Dev Build and Deploy to AWS
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build-and-deploy:
