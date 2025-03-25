@@ -76,9 +76,9 @@ export class KakaoController {
         // 큐 등록은 await 하지 않고 백그라운드로 실행
         this.articleQueue.add('generateArticle', { userId, callbackUrl })
             .then((job) => {
-            console.log('✅ 큐 등록됨 jobId:', job.id);
+            console.log('큐 등록됨 jobId:', job.id);
         }).catch((e) => {
-            console.error('❌ 큐 등록 실패:', e);
+            console.error('큐 등록 실패:', e);
         });
 
         return this.formatKakaoCallbackResponse(
