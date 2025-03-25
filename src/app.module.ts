@@ -9,9 +9,12 @@ import {ConfigModule, ConfigService} from "@nestjs/config";
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/logging.interceptor';
+import {BullModule} from "@nestjs/bull";
+import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
 
 @Module({
-  imports: [OpenAIModule, ChatModule, KakaoModule, ConfigModule.forRoot({
+  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule,
+    ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
     envFilePath: [ '.env.' + process.env.NODE_ENV ], // 실행 환경에 따라 .env 파일을 선택
@@ -28,7 +31,17 @@ import { LoggingInterceptor } from './common/logging.interceptor';
 
         return { uri };
 
-      },
+      },}),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+          // password: configService.get<string>('REDIS_PASSWORD'), // 필요 시
+        },
+      }),
     }),
   ],
   controllers: [AppController],
