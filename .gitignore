@@ -65,3 +65,6 @@ serverless.yaml
 
 # warmup 파일 (실행때만 필요함)
 _warmup/
+
+## Docker-compose
+docker-compose.yml
