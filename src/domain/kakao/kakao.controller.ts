@@ -52,11 +52,23 @@ export class KakaoController {
         // 글 생성
         const article = await this.chatService.createArticle(chatHistory);
 
+        // 글 형식 변환
+        /*
+        * (편지 이모지)(편지 이모지)(편지 이모지)
+        * 생성된 글
+        * (편지 이모지)(편지 이모지)(편지 이모지)
+        *
+        * 하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!
+        * 이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!
+        * https://hada.ganadacorp.com/write
+        * */
+        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!\nhttps://hada.ganadacorp.com/write`;
+
         // 이전 대화 내역 삭제
         this.userSessionService.clear(userId);
 
         // 카카오톡 응답 JSON 형식 변환
-        return this.formatKakaoResponse(article);
+        return this.formatKakaoResponse(finalResponse);
 
     }
 
