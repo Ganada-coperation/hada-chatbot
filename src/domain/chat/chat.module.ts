@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { OpenAIModule } from '../openai/openai.module';
+import { OpenAIModule } from '../../infrastructure/openai/openai.module';
 
 @Module({
     imports: [OpenAIModule],

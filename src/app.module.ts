@@ -1,14 +1,14 @@
 import {Logger, Module, OnApplicationBootstrap} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { OpenAIModule } from './domain/openai/openai.module';
+import { OpenAIModule } from './infrastructure/openai/openai.module';
 import { ChatModule } from './domain/chat/chat.module';
 import { KakaoModule } from './domain/kakao/kakao.module';
 import { configValidationSchema } from './config/validation/config-validation';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './common/logging.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import {BullModule} from "@nestjs/bull";
 import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
 import {NewsletterModule} from "./domain/newsletter/newsletter.module";
