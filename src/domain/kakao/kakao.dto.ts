@@ -1,14 +1,24 @@
-import { IsString, IsArray, ValidateNested } from 'class-validator';
+import {IsString, IsArray, ValidateNested, IsObject} from 'class-validator';
 import { Type } from 'class-transformer';
+
+export class UserDto {
+    @IsString()
+    id: string;
+
+    @IsString()
+    type: string;
+
+    @IsObject()
+    properties: { botUserKey: string };
+}
 
 export class UserRequestDto {
     block: { id: string; name: string };
     callbackUrl?: string;
-    user: {
-        id: string;
-        type: string;
-        properties: { botUserKey: string };
-    };
+
+    @ValidateNested({ each: true })
+    @Type(() => UserDto)
+    user: UserDto;
     utterance: string;
     params: { surface: string; ignoreMe: string };
     lang: string;
