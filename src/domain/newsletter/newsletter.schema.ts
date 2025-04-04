@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import {BaseSchema} from "../../common/base/base.enetity";
+import {BaseSchema} from "../../common/base/base.schema";
 
 @Schema({ timestamps: true })
 export class Newsletter extends BaseSchema {

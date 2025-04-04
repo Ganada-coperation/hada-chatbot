@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 import {Prop, SchemaFactory} from "@nestjs/mongoose";
-import {BaseSchema} from "../../common/base/base.enetity";
+import {BaseSchema} from "../../common/base/base.schema";
 
 export class User extends BaseSchema {
   @Prop({ required: true, unique: true })
