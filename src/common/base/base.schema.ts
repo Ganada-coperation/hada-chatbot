@@ -3,8 +3,8 @@ import { Prop, Schema } from '@nestjs/mongoose';
 @Schema({ timestamps: true })
 export class BaseSchema {
     @Prop()
-    createdAt?: Date;
+    createdAt: Date;
 
     @Prop()
-    updatedAt?: Date;
+    updatedAt: Date;
 }
