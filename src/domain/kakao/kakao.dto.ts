@@ -51,7 +51,11 @@ export class SkillPayloadDto {
     bot: BotDto;
     intent: IntentDto;
     action: ActionDto;
+
+    @ValidateNested()
+    @Type(() => UserRequestDto)
     userRequest: UserRequestDto;
+
     contexts: any[];
 }
 
@@ -90,5 +94,8 @@ export class KakaoCallbackResponseDto {
     @IsString()
     version: string;
     useCallback : boolean;
+
+    @ValidateNested()
+    @Type(() => Data)
     data : Data;
 }
