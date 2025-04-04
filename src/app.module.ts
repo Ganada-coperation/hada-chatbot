@@ -14,6 +14,8 @@ import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
 import {NewsletterModule} from "./domain/newsletter/newsletter.module";
 import {PostModule} from "./domain/post/post.module";
 import {UserModule} from "./domain/user/user.module";
+import {databaseConfig} from "./config/database.config";
+import {bullConfig} from "./config/bull.config";
 
 
 @Module({
@@ -26,27 +28,16 @@ import {UserModule} from "./domain/user/user.module";
   }),
     // MongoDB 연결
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], // ConfigModule 로드
-      inject: [ConfigService], // ConfigService 주입
-      useFactory: (configService: ConfigService) => {
-        const dbHost = configService.get<string>('DB_HOST');
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: databaseConfig,
+    }),
 
-        const uri = `${dbHost}`;
-
-        return { uri };
-
-      },}),
-      // BullModule 설정
+    // Redis 연결
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<number>('REDIS_PORT'),
-          // password: configService.get<string>('REDIS_PASSWORD'), // 필요 시
-        },
-      }),
+      useFactory: bullConfig,
     }),
   ],
   controllers: [AppController],
