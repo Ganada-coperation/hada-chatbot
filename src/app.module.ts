@@ -7,7 +7,7 @@ import { KakaoModule } from './domain/kakao/kakao.module';
 import { configValidationSchema } from './config/validation/config-validation';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import {APP_FILTER, APP_INTERCEPTOR} from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import {BullModule} from "@nestjs/bull";
 import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
@@ -16,6 +16,8 @@ import {PostModule} from "./domain/post/post.module";
 import {UserModule} from "./domain/user/user.module";
 import {databaseConfig} from "./config/database.config";
 import {bullConfig} from "./config/bull.config";
+import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
+import {AllExceptionsFilter} from "./common/interceptors/global.exception.interceptor";
 
 
 @Module({
@@ -46,6 +48,14 @@ import {bullConfig} from "./config/bull.config";
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })
