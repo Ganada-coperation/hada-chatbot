@@ -2,15 +2,25 @@ import {
     ExceptionFilter,
     Catch,
     ArgumentsHost,
-    HttpException,
+    HttpException, Logger,
 } from '@nestjs/common';
 import {BaseResponse} from "../base/base.resposne";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+
+    // 로거
+    private readonly logger = new Logger(AllExceptionsFilter.name);
+
     catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
+
+        this.logger.error(
+            `Unhandled Exception: ${exception instanceof Error ? exception.message : String(exception)}`,
+            exception instanceof Error ? exception.stack : undefined,
+        );
+
 
         const status =
             exception instanceof HttpException
