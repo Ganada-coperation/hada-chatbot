@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {Document, HydratedDocument} from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import {BaseSchema} from "../../common/base/base.enetity";
+import {BaseSchema} from "../../common/base/base.schema";
 
 @Schema()
 export class Post extends BaseSchema {
