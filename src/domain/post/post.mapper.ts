@@ -12,9 +12,7 @@ export class PostMapper {
             nickname: post.nickname,
             title: post.title,
             content: post.content,
-            postId: post.postId,
-            createdAt: post.createdAt.toISOString(),
-            updatedAt: post.updatedAt.toISOString(),
+            postId: post.postId
         };
     }
 

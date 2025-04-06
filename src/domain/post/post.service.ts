@@ -10,11 +10,18 @@ export class PostService {
 
   // 글 저장 기능
   async savePost(request: CreatePostRequest): Promise<Post> {
-    return await this.postModel.create(request);
+    const newPost = new this.postModel(request);
+    return await newPost.save();
   }
 
   // 글 목록 조회 기능
   async getPosts(): Promise<Post[]> {
     return this.postModel.find().sort({ createdAt: -1 }).exec();
+  }
+
+  // 글 상세 조회 기능
+  async getPostById(postId: string): Promise<Post | null> {
+    // todo: postId 유효성 검사
+    return this.postModel.findOne({ postId: postId }).exec();
   }
 }

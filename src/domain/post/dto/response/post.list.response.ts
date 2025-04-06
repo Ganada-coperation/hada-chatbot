@@ -12,12 +12,6 @@ export class PostResponse {
 
     @IsString()
     postId: string;
-
-    @IsString()
-    createdAt: string;
-
-    @IsString()
-    updatedAt: string;
 }
 
 export class PostListResponse {
