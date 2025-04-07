@@ -1,23 +1,28 @@
 import {Logger, Module, OnApplicationBootstrap} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { OpenAIModule } from './domain/openai/openai.module';
+import { OpenAIModule } from './infrastructure/openai/openai.module';
 import { ChatModule } from './domain/chat/chat.module';
 import { KakaoModule } from './domain/kakao/kakao.module';
 import { configValidationSchema } from './config/validation/config-validation';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './common/logging.interceptor';
+import {APP_FILTER, APP_INTERCEPTOR} from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import {BullModule} from "@nestjs/bull";
 import {ArticleQueueModule} from "./domain/kakao/queue/article-queue.module";
 import {NewsletterModule} from "./domain/newsletter/newsletter.module";
 import {PostModule} from "./domain/post/post.module";
 import {UserModule} from "./domain/user/user.module";
+import {databaseConfig} from "./config/database.config";
+import {bullConfig} from "./config/bull.config";
+import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
+import {AllExceptionsFilter} from "./common/interceptors/global.exception.interceptor";
+import {MailModule} from "./infrastructure/mail/mail.module";
 
 
 @Module({
-  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule, NewsletterModule, PostModule, UserModule,
+  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule, NewsletterModule, PostModule, UserModule, MailModule,
     ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
@@ -26,27 +31,16 @@ import {UserModule} from "./domain/user/user.module";
   }),
     // MongoDB 연결
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], // ConfigModule 로드
-      inject: [ConfigService], // ConfigService 주입
-      useFactory: (configService: ConfigService) => {
-        const dbHost = configService.get<string>('DB_HOST');
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: databaseConfig,
+    }),
 
-        const uri = `${dbHost}`;
-
-        return { uri };
-
-      },}),
-      // BullModule 설정
+    // Redis 연결
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<number>('REDIS_PORT'),
-          // password: configService.get<string>('REDIS_PASSWORD'), // 필요 시
-        },
-      }),
+      useFactory: bullConfig,
     }),
   ],
   controllers: [AppController],
@@ -55,6 +49,14 @@ import {UserModule} from "./domain/user/user.module";
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })

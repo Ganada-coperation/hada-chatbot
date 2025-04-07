@@ -3,9 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './post.schema';
 import { PostService } from './post.service';
 import { PostController } from './post.controller';
+import {MailModule} from "../../infrastructure/mail/mail.module";
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }])],
+  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]), MailModule],
   controllers: [PostController],
   providers: [PostService],
   exports: [PostService],
