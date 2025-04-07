@@ -18,10 +18,11 @@ import {databaseConfig} from "./config/database.config";
 import {bullConfig} from "./config/bull.config";
 import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
 import {AllExceptionsFilter} from "./common/interceptors/global.exception.interceptor";
+import {MailModule} from "./infrastructure/mail/mail.module";
 
 
 @Module({
-  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule, NewsletterModule, PostModule, UserModule,
+  imports: [OpenAIModule, ChatModule, KakaoModule, ArticleQueueModule, NewsletterModule, PostModule, UserModule, MailModule,
     ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
