@@ -6,6 +6,7 @@ export class MailService {
     constructor(private readonly mailerService: MailerService) {}
 
     async sendPostMail(email: string, title: string, nickname: string, content: string) {
+        // todo : html 템플릿으로 변경(이쁜 템플릿 만들어서 보내기)
         const html = `
       <h2>${title}</h2>
       <p><strong>작성자:</strong> ${nickname}</p>
