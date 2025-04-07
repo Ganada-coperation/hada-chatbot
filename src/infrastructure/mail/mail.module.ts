@@ -1,20 +1,26 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailService } from './mail.service';
+import {ConfigModule, ConfigService} from "@nestjs/config";
 
 @Module({
     imports: [
-        MailerModule.forRoot({
-            transport: {
-                service: 'gmail',
-                auth: {
-                    user: process.env.MAIL_USER,
-                    pass: process.env.MAIL_PASS,
+        ConfigModule, // ✅ ConfigModule 추가!
+        MailerModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (configService: ConfigService) => ({
+                transport: {
+                    service: 'gmail',
+                    auth: {
+                        user: configService.get<string>('MAIL_USER'),
+                        pass: configService.get<string>('MAIL_PASS'),
+                    },
                 },
-            },
-            defaults: {
-                from: '"Hada 서비스" <no-reply@hada.com>',
-            },
+                defaults: {
+                    from: '"Hada 서비스" <no-reply@hada.com>',
+                },
+            }),
         }),
     ],
     providers: [MailService],
