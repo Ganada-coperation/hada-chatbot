@@ -31,12 +31,15 @@ export class ArticleProcessor {
         // 글 생성
         const article = await this.chatService.createArticle(chatHistory);
 
+        // 최종 응답
+        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!\nhttps://hada.ganadacorp.com/write`;
+
         // 이전 대화 내역 삭제
         this.userSessionService.clear(userId);
 
-        const finalResponse = this.formatKakaoResponse(article)
+        const kakaoResponse = this.formatKakaoResponse(finalResponse)
 
-        await firstValueFrom(this.httpService.post(callbackUrl, finalResponse));
+        await firstValueFrom(this.httpService.post(callbackUrl, kakaoResponse));
     }
 
     // 카카오톡 응답 JSON 형식 변환 todo : 맵퍼로 빼기
