@@ -80,9 +80,9 @@ export class KakaoController {
         const callbackUrl = body.userRequest.callbackUrl;
         console.log('[DEBUG] callbackUrl:', callbackUrl);
         console.log('articleQueue 존재 여부:', this.articleQueue); // null or undefined이면 주입 안 됨
-        console.log('🧪 등록할 큐 이름:', this.articleQueue.name);
-        console.log('🧪 Redis 상태:', this.articleQueue.clients);
-        console.log('🧪 등록할 데이터:', { userId, callbackUrl });
+        console.log('등록할 큐 이름:', this.articleQueue.name);
+        console.log('Redis 상태:', this.articleQueue.clients);
+        console.log('등록할 데이터:', { userId, callbackUrl });
 
         // 글 생성 작업 큐에 추가
         // 큐 등록은 await 하지 않고 백그라운드로 실행
@@ -109,7 +109,7 @@ export class KakaoController {
         this.userSessionService.clear(userId);
 
         // 카카오톡 응답 JSON 형식 변환 todo : 안내 메시지 바꾸기
-        return this.formatKakaoResponse("하다와 대화가 종료되었어요! 다시 대화를 시작하려면 \"하다야\"와 함께 메시지를 입력해주세요.");
+        return this.formatKakaoResponse("하다와 대화가 종료되었어요! 다시 대화를 시작하고 싶다면 하다에게 \"안녕\"이라고 보내보세요");
     }
 
 
