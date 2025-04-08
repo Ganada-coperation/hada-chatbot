@@ -94,7 +94,7 @@ export class KakaoController {
         });
 
         return this.formatKakaoCallbackResponse(
-            '하다가 글을 생성하고 있어요!\n잠시만 기다려 주시면 멋진 글을 만들어 드릴게요!',
+            '하다가 글을 생성하고 있어요!\n1분만 기다려 주시면 멋진 글을 만들어 드릴게요!',
         );
     }
 
