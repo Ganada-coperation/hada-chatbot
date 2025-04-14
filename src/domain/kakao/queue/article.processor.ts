@@ -39,7 +39,9 @@ export class ArticleProcessor {
 
         const kakaoResponse = this.formatKakaoResponse(finalResponse)
 
+        // 카카오톡에 응답 전송
         await firstValueFrom(this.httpService.post(callbackUrl, kakaoResponse));
+
     }
 
     // 카카오톡 응답 JSON 형식 변환 todo : 맵퍼로 빼기
