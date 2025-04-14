@@ -2,7 +2,7 @@ import {Controller, Post, Body} from '@nestjs/common';
 import { ChatService } from '../chat/chat.service';
 import {KakaoCallbackResponseDto, KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
 import {ApiBody} from "@nestjs/swagger";
-import {UserSessionService} from "./user-session.service";
+import {UserSessionService} from "../user/user-session.service";
 import {InjectQueue} from "@nestjs/bull";
 import {Queue} from "bull";
 
