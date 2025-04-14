@@ -1,6 +1,6 @@
 import {ChatService} from "../../chat/chat.service";
 import {HttpService} from "@nestjs/axios";
-import {UserSessionService} from "../user-session.service";
+import {UserSessionService} from "../../user/user-session.service";
 import { Process, Processor } from '@nestjs/bull';
 import {Job} from "bull";
 import {firstValueFrom} from "rxjs";
