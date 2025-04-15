@@ -59,4 +59,11 @@ export class GeneratedContentService {
             return null;
         }
     }
+
+    // 조회
+    async findByGeneratedPostId(postId: string): Promise<GeneratedContentDocument> {
+        const result = await this.model.findOne({ generatedPostId: postId });
+        if (!result) throw new NotFoundException('해당 글을 찾을 수 없습니다.');
+        return result;
+    }
 }
