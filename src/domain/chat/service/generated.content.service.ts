@@ -1,5 +1,5 @@
 import {GeneratedContent, GeneratedContentDocument} from "../schema/generated.content.schema";
-import {Injectable, Logger} from "@nestjs/common";
+import {Injectable, Logger, NotFoundException} from "@nestjs/common";
 import {InjectModel} from "@nestjs/mongoose";
 import {ChatService} from "./chat.service";
 import {Model} from "mongoose";
@@ -12,6 +12,8 @@ export class GeneratedContentService {
         private readonly chatService: ChatService,
         @InjectModel(GeneratedContent.name)
         private readonly generatedContentModel: Model<GeneratedContentDocument>,
+        @InjectModel(GeneratedContent.name)
+        private readonly model: Model<GeneratedContentDocument>,
     ) {}
 
     /**
