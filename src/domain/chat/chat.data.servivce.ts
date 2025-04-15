@@ -46,12 +46,12 @@ export class ChatDataService {
     }
 
     //세션별 전체 채팅 내역 조회 (시간 순)
-    async getChatHistory(kakaoUserId: string): Promise<ChatMessageDocument[]> {
+    async getOnlyUserMessages(kakaoUserId: string): Promise<ChatMessageDocument[]> {
         // 사용자 ID로 활성 세션 조회
         const session = await this.getOrCreateActiveSession(kakaoUserId);
 
         return this.chatMessageModel
-            .find({ session: session._id })
+            .find({ session: session._id , sender: SenderType.USER }) // 사용자 메시지만 조회
             .sort({ createdAt: 1 })
             .exec();
     }

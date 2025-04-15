@@ -30,7 +30,7 @@ export class KakaoController {
         await this.userService.findOrCreateByKakaoUserId(userId);
 
         // 이전 대화 내역 조회
-        const chatHistory = (await this.chatDataService.getChatHistory(userId)).join("\n");
+        const chatHistory = (await this.chatDataService.getOnlyUserMessages(userId)).join("\n");
 
         // 사용자 메시지 저장
         await this.chatDataService.addMessage(userId, SenderType.USER, userMessage);
@@ -57,7 +57,7 @@ export class KakaoController {
         await this.userService.findOrCreateByKakaoUserId(userId);
 
         // 이전 대화 내역 조회
-        const chatHistory = (await this.chatDataService.getChatHistory(userId)).join("\n");
+        const chatHistory = (await this.chatDataService.getOnlyUserMessages(userId)).join("\n");
 
         // 글 생성
         const article = await this.chatService.createArticle(chatHistory);
