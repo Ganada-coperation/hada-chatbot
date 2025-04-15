@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import {BaseSchema} from "../../common/base/base.schema";
 
-@Schema()
+@Schema({ timestamps: true })
 export class User extends BaseSchema {
   @Prop({ required: true, unique: true })
   nickname: string;

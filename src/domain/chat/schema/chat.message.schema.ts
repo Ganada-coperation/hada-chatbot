@@ -3,7 +3,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 import {SenderType} from "./chat.enum";
 
-@Schema()
+@Schema({ timestamps: true })
 export class ChatMessage extends BaseSchema {
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ChatSession', required: true })
     session: Types.ObjectId;

@@ -2,7 +2,7 @@ import {BaseSchema} from "../../../common/base/base.schema";
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class ChatSession extends BaseSchema {
     @Prop({ required: true })
     kakaoUserId: string; // 카카오 사용자 ID (botUserKey)
