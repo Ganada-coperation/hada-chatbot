@@ -40,7 +40,7 @@ export class ArticleProcessor {
         const article = this.convertGeneratedContentToString(generatedContent);
 
         // 최종 응답
-        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!\nhttps://hada.ganadacorp.com/write/${generatedContent.generatedPostId}`;
+        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 접속해 글 제출을 해주세요!\nhttps://hada.ganadacorp.com/write/${generatedContent.generatedPostId}`;
 
         // 이전 대화 내역 삭제
         await this.chatDataService.finishSession(userId);
