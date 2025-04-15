@@ -3,7 +3,7 @@ import { ChatService } from './service/chat.service';
 import { OpenAIModule } from '../../infrastructure/openai/openai.module';
 import {ChatDataService} from "./service/chat.data.servivce";
 import {MongooseModule} from "@nestjs/mongoose";
-import {Post, PostSchema} from "../post/post.schema";
+import {Post, PostSchema} from "../post/schema/post.schema";
 import {ChatMessage, ChatMessageSchema} from "./schema/chat.message.schema";
 import {ChatSession, ChatSessionSchema} from "./schema/chat.session.schema";
 import {GeneratedContent, GeneratedContentSchema} from "./schema/generated.content.schema";

@@ -1,4 +1,4 @@
-import { Post } from './post.schema';
+import { Post } from './schema/post.schema';
 import { PostIdResponse } from './dto/response/post.id.response';
 import {PostListResponse, PostResponse} from "./dto/response/post.list.response";
 
