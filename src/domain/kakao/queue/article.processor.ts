@@ -1,4 +1,4 @@
-import {ChatService} from "../../chat/chat.service";
+import {ChatService} from "../../chat/service/chat.service";
 import {HttpService} from "@nestjs/axios";
 import {UserSessionService} from "../../user/user-session.service";
 import { Process, Processor } from '@nestjs/bull';
@@ -6,7 +6,7 @@ import {Job} from "bull";
 import {firstValueFrom} from "rxjs";
 import {KakaoResponseDto} from "../kakao.dto";
 import {UserService} from "../../user/user.service";
-import {ChatDataService} from "../../chat/chat.data.servivce";
+import {ChatDataService} from "../../chat/service/chat.data.servivce";
 
 @Processor('articleQueue')
 export class ArticleProcessor {
@@ -44,8 +44,6 @@ export class ArticleProcessor {
 
         // 카카오톡에 응답 전송
         await firstValueFrom(this.httpService.post(callbackUrl, kakaoResponse));
-
-        // todo : post 저징
 
     }
 

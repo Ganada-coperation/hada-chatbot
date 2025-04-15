@@ -1,13 +1,14 @@
 import {Controller, Post, Body} from '@nestjs/common';
-import { ChatService } from '../chat/chat.service';
+import { ChatService } from '../chat/service/chat.service';
 import {KakaoCallbackResponseDto, KakaoResponseDto, SkillPayloadDto} from './kakao.dto';
 import {ApiBody} from "@nestjs/swagger";
 import {InjectQueue} from "@nestjs/bull";
 import {Queue} from "bull";
 import {UserService} from "../user/user.service";
-import {ChatDataService} from "../chat/chat.data.servivce";
+import {ChatDataService} from "../chat/service/chat.data.servivce";
 import {SenderType} from "../chat/schema/chat.enum";
 
+// todo 카카오 서비스 만들어서 분리하기
 @Controller('kakao')
 export class KakaoController {
     constructor(private readonly chatService: ChatService,
@@ -67,8 +68,6 @@ export class KakaoController {
 
         // 이전 대화 세션 끝내기
         await this.chatDataService.finishSession(userId);
-
-        // todo : post 저징
 
         // 카카오톡 응답 JSON 형식 변환
         return this.formatKakaoResponse(finalResponse);

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {ChatSession, ChatSessionDocument} from "./schema/chat.session.schema";
-import {ChatMessage, ChatMessageDocument} from "./schema/chat.message.schema";
-import {SenderType} from "./schema/chat.enum";
-import {User, UserDocument} from "../user/user.schema";
+import {ChatSession, ChatSessionDocument} from "../schema/chat.session.schema";
+import {ChatMessage, ChatMessageDocument} from "../schema/chat.message.schema";
+import {SenderType} from "../schema/chat.enum";
+import {User, UserDocument} from "../../user/user.schema";
 
 @Injectable()
 export class ChatDataService {
