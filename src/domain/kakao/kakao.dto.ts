@@ -19,6 +19,8 @@ export class UserRequestDto {
     @ValidateNested({ each: true })
     @Type(() => UserDto)
     user: UserDto;
+
+    @IsString()
     utterance: string;
     params: { surface: string; ignoreMe: string };
     lang: string;

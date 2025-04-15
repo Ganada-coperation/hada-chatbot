@@ -4,8 +4,8 @@ import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 
 @Schema()
 export class ChatSession extends BaseSchema {
-    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-    user: Types.ObjectId;
+    @Prop({ required: true })
+    kakaoUserId: string; // 카카오 사용자 ID (botUserKey)
 
     @Prop({ default: false }) // 대화 종료 여부
     isFinished: boolean;

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import {ChatSession, ChatSessionDocument} from "./schema/chat.session.schema";
 import {ChatMessage, ChatMessageDocument} from "./schema/chat.message.schema";
 import {SenderType} from "./schema/chat.enum";
+import {User, UserDocument} from "../user/user.schema";
 
 @Injectable()
 export class ChatDataService {
@@ -12,18 +13,19 @@ export class ChatDataService {
         private readonly chatSessionModel: Model<ChatSessionDocument>,
 
         @InjectModel(ChatMessage.name)
-        private readonly chatMessageModel: Model<ChatMessageDocument>,
+        private readonly chatMessageModel: Model<ChatMessageDocument>
     ) {}
 
     // 사용자의 활성 채팅 세션 조회 또는 생성
     async getOrCreateActiveSession(kakaoUserId: string): Promise<ChatSessionDocument> {
+
         // 사용자 ID로 활성 세션 조회
-        let session = await this.chatSessionModel.findOne({ user: kakaoUserId, isFinished: false });
+        let session = await this.chatSessionModel.findOne({ kakaoUserId: kakaoUserId, isFinished: false });
 
         // 활성 세션이 없으면 새로 생성
         if (!session) {
             session = await this.chatSessionModel.create({
-                user: kakaoUserId,
+                kakaoUserId: kakaoUserId,
                 isFinished: false,
             });
         }
@@ -55,10 +57,14 @@ export class ChatDataService {
     }
 
     //세션 종료 처리 (글 생성 완료 등)
-    async finishSession(sessionId: string): Promise<void> {
-        await this.chatSessionModel.findByIdAndUpdate(sessionId, {
-            isFinished: true,
-            finishedAt: new Date(),
-        });
+    async finishSession(kakaoUserId: string): Promise<void> {
+        await this.chatSessionModel.findOneAndUpdate(
+            { kakaoUserId, isFinished: false }, // 🔍 현재 진행 중인 세션만 종료
+            {
+                isFinished: true,
+                finishedAt: new Date(),
+            },
+        );
+
     }
 }

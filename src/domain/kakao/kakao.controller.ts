@@ -23,6 +23,9 @@ export class KakaoController {
         const userMessage = body.userRequest.utterance;
         const userId = body.userRequest.user.id;
 
+        console.log('[DEBUG] userId:', userId);
+        console.log('[DEBUG] userMessage:', userMessage);
+
         // 사용자 ID가 없으면 새로운 사용자를 생성
         await this.userService.findOrCreateByKakaoUserId(userId);
 
