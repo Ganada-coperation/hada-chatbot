@@ -7,6 +7,8 @@ import {Queue} from "bull";
 import {UserService} from "../user/user.service";
 import {ChatDataService} from "../chat/service/chat.data.servivce";
 import {SenderType} from "../chat/schema/chat.enum";
+import {GeneratedContentService} from "../chat/service/generated.content.service";
+import {GeneratedContent} from "../chat/schema/generated.content.schema";
 
 // todo 카카오 서비스 만들어서 분리하기
 @Controller('kakao')
@@ -14,6 +16,7 @@ export class KakaoController {
     constructor(private readonly chatService: ChatService,
                 private readonly userService: UserService,
                 private readonly chatDataService: ChatDataService,
+                private readonly generatedContentService: GeneratedContentService,
                 @InjectQueue('articleQueue') private readonly articleQueue: Queue,
                 ) {}
 
@@ -61,10 +64,13 @@ export class KakaoController {
         const chatHistory = (await this.chatDataService.getOnlyUserMessages(userId)).join("\n");
 
         // 글 생성
-        const article = await this.chatService.createArticle(chatHistory);
+        const generatedContent:GeneratedContent = await this.generatedContentService.generateContent(chatHistory, userId);
+
+        // 생성된 글을 문자열로 변환
+        const article = this.convertGeneratedContentToString(generatedContent);
 
         // 글 형식 변환
-        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!\nhttps://hada.ganadacorp.com/write`;
+        const finalResponse = `💌💌💌\n${article}\n💌💌💌\n\n하다가 당신의 이야기를 바탕으로 글을 작성해봤어요!\n이 글이 뉴스레터로 다른 사람들과 공유되기 원한다면 아래 링크로 글을 보내주세요!\nhttps://hada.ganadacorp.com/write/${generatedContent.generatedPostId}`;
 
         // 이전 대화 세션 끝내기
         await this.chatDataService.finishSession(userId);
@@ -135,6 +141,12 @@ export class KakaoController {
             useCallback: true,
             data: { text: text }
         };
+    }
+
+    // GeneratedContent 글로 변환
+    private convertGeneratedContentToString(generatedContent:GeneratedContent): string {
+        return `제목\n${generatedContent.title}\n\n내용\n${generatedContent.content}\n`;
+
     }
 }
 
