@@ -7,9 +7,10 @@ import {ArticleQueueModule} from "./queue/article-queue.module";
 import {BullModule} from "@nestjs/bull";
 import {UserModule} from "../user/user.module";
 import {PostModule} from "../post/post.module";
+import {ChatDataService} from "../chat/chat.data.servivce";
 
 @Module({
-    imports: [ChatModule, HttpModule, UserModule, PostModule,
+    imports: [ChatModule, HttpModule, UserModule, PostModule, ChatModule,
         forwardRef(() => ArticleQueueModule),
         BullModule.registerQueue({ name: 'articleQueue' }),],
     controllers: [KakaoController],
