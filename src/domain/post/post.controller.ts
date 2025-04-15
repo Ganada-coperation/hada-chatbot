@@ -1,15 +1,19 @@
 import {Controller, Post, Body, Get, NotFoundException} from '@nestjs/common';
-import { PostService } from './post.service';
+import { PostService } from './service/post.service';
 import {PostIdResponse} from "./dto/response/post.id.response";
 import {PostListResponse, PostResponse} from "./dto/response/post.list.response";
 import {CreatePostRequest} from "./dto/request/create.post.request";
 import {PostMapper} from "./post.mapper";
 import {ApiBody, ApiResponse} from "@nestjs/swagger";
 import {MailService} from "../../infrastructure/mail/mail.service";
+import {SendPostMailDto} from "./dto/request/send-post-mail.dto";
+import {PostMailLogService} from "./service/post-mail-log.service";
 
 @Controller('posts') // 👉 `/posts` 경로로 API 요청을 받음
 export class PostController {
-  constructor(private readonly postService: PostService, private readonly mailService:MailService) {}
+  constructor(private readonly postService: PostService
+              , private readonly mailService:MailService
+              , private readonly postMailLogService:PostMailLogService) {}
 
   // 글 저장 API (POST /posts)
   @Post()
@@ -55,7 +59,7 @@ export class PostController {
   // 성공 리턴
 // todo : DTO로 감싸기
   @Post('send-mail')
-  async sendPostMail(@Body() body: { postId: string; email: string }) {
+  async sendPostMail(@Body() body: SendPostMailDto) {
 
     const post = await this.postService.getPostById(body.postId);
 
@@ -64,6 +68,8 @@ export class PostController {
     }
 
     await this.mailService.sendPostMail(body.email, post.title, post.nickname, post.content);
+
+    await this.postMailLogService.logMailSend(body.email, post.postId);
 
     return { message: '메일이 성공적으로 발송되었습니다!' };
   }

@@ -19,6 +19,7 @@ export class OpenAIService {
 
             const startTime = performance.now(); // 시작 시간 기록
 
+            // todo : json 형식으로 제한 설정 추가하기
             const response = await this.openai.chat.completions.create({
                 model: 'gpt-4o-mini',
                 temperature: 0.8,
