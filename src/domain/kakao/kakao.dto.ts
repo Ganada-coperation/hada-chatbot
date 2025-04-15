@@ -1,25 +1,33 @@
 import {IsString, IsArray, ValidateNested, IsObject} from 'class-validator';
 import { Type } from 'class-transformer';
+import {ApiProperty} from "@nestjs/swagger";
 
 export class UserDto {
+    @ApiProperty()
     @IsString()
     id: string;
 
+    @ApiProperty()
     @IsString()
     type: string;
 
     @IsObject()
+    @ApiProperty()
     properties: { botUserKey: string };
 }
 
 export class UserRequestDto {
+    @ApiProperty()
     block: { id: string; name: string };
+
     callbackUrl?: string;
 
+    @ApiProperty()
     @ValidateNested({ each: true })
     @Type(() => UserDto)
     user: UserDto;
 
+    @ApiProperty()
     @IsString()
     utterance: string;
     params: { surface: string; ignoreMe: string };
@@ -29,6 +37,7 @@ export class UserRequestDto {
 
 export class IntentDto {
     id: string;
+
     name: string;
     extra?: {
         reason: { code: number; message: string };
@@ -64,6 +73,7 @@ export class SkillPayloadDto {
     intent: IntentDto;
     action: ActionDto;
 
+    @ApiProperty()
     @ValidateNested()
     @Type(() => UserRequestDto)
     userRequest: UserRequestDto;
