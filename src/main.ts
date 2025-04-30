@@ -8,9 +8,11 @@ async function bootstrap() {
 
   // ✅ CORS 설정 추가
   app.enableCors({
-    origin: ['http://localhost:3000',  'https://hada.ganadacorp.com/'], // 프론트엔드 주소
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: true,  // 모든 origin 허용
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    exposedHeaders: ['Content-Type', 'Authorization']
   });
 
   const config = new DocumentBuilder()
